@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b1665b07-9273-491a-9095-41d5492b16b9" >
+		<http:listener-connection host="${http.listner.host}" port="${http.listner.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="25f5b966-fbc9-4e27-8be5-c9d8adafd083" file="${env}.properties" />
+	<flow name="auro-jenkins-cicd-deployFlow" doc:id="6184b64c-1316-47ae-a9da-9cdba1dad58a" >
+		<http:listener doc:name="Listener" doc:id="f150996a-beb5-40f3-b870-c0421613a74c" config-ref="HTTP_Listener_config" path="/Auro"/>
+		<ee:transform doc:name="Transform Message" doc:id="c0dabf14-b1e0-4d34-af22-9545c78c6e53" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+            "firstName": "ganesh",
+            "lastName": "reddy",
+            "userName": "ganesh44",
+            "password": "password"
+        }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="9fc09142-6172-4ffb-8cbf-1e39a0621497" message="#[payload]"/>
+	</flow>
+</mule>
